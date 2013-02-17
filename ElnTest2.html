@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <META charset="UTF-8">
+	<style>
+		body { font-family:arial; font-size:12px;}
+		#elexMapCanvas {width:900px; height:800px; }
+		#contestSelect {width:895px; padding:0px 5px; height:2em; clear:both;}
+		#contestSelect a { color:#000000; text-decoration:none; background-color: #ccc; padding: 5px 8px; border: 1px solid #888; border-radius:.5em; -moz-border-radius:.5em; -webkit-border-radius:.5em; margin-right: .5em; }
+		#contestSelect a:hover { background-color: #aaa; color:#ddd; -webkit-box-shadow: 2px 2px 4px rgba(0,0,0,0.5); -moz-box-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+		#contestStatus { font-style: italic; }
+		#contestLinks {float:left;}
+		#countyLinks {float:right;}
+		#elexMapInstructions {width:895px; margin-bottom:10px; }
+		#instructions{float:right;}
+		#mapDescription { background-color:#dedede; padding:5px 0px 5px 5px; margin:5px 0px 0px 0px; width: 893px; border: 1px solid #ccc; border-bottom: none; }
+		#mapLegend { background-color:#dedede; padding:5px 0px 5px 5px; font-size: small; width: 893px; border: 1px solid #ccc; border-bottom: none; border-top: none; }
+		#mapTitle {font-weight:bold; font-size: medium }
+		#mapCredit {float: right; text-align: right; padding-right:10px;font-weight: normal;}
+	</style>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+	<script type="text/javascript">
+		var elexCurrentContest = 'President';
+		var elexMap;
+		var elexResultsLayer;
+		var elexCurrentCity;
+		var elexCurrentCity ='';
+
+// Here are two legends, each with its own shading; notice that the shading for the variable elexLegendText depends on the value given the variable. 
+
+
+		var elexLegendText=new Array();
+		elexLegendText['President']="<span style=\"color:DarkBlue; font-weight:bold;\">Blue</span> = Strongly Democratic | <span style=\"color:CadetBlue; font-weight:bold;\">Light blue</span> = Leans Democratic | <span style=\"color:#A36955; font-weight:bold;\">Salmon</span> = Leans Republican | <span style=\"color:#A01F1F; font-weight:bold;\">Red</span> = Strongly Republican" ;
+		elexLegendText['Prop30']="<span style=\"color:Green; font-weight:bold;\">Dark Green</span> = Strongly for | <span style=\"color:DarkOliveGreen; font-weight:bold;\">Light green</span> = Leans for | <span style=\"color:DarkGray; font-weight:bold;\">Light Gray</span> = Leans against | <span style=\"color:#656565; font-weight:bold;\">Dark Gray</span> = Strongly against" ;
+		elexLegendText['Prop34']=elexLegendText['Prop30'];
+
+// The variable elexCityCenters is a series of latitudes and longitudes assigned to cities. This will be referenced later in the script.
+
+		var elexCityCenters=new Array();
+		elexCityCenters['']=new google.maps.LatLng(33.72000, -117.82562255859375);
+		elexCityCenters['Aliso Viejo']=new google.maps.LatLng(33.5750,-117.7256);
+		elexCityCenters['Anaheim']=new google.maps.LatLng(33.8353,-117.9136);
+		elexCityCenters['Buena Park']=new google.maps.LatLng(33.8675,-117.9972);
+		elexCityCenters['Brea']=new google.maps.LatLng(33.9167,-117.8992);
+		elexCityCenters['Costa Mesa']=new google.maps.LatLng(33.6411,-117.9178);
+		elexCityCenters['Coto de Caza']=new google.maps.LatLng(33.5958,-117.5878);
+		elexCityCenters['Cypress']=new google.maps.LatLng(33.8169,-118.0364);
+		elexCityCenters['Dana Point']=new google.maps.LatLng(33.4722,-117.6931);
+		elexCityCenters['Fountain Valley']=new google.maps.LatLng(33.7092,-117.9528);
+		elexCityCenters['Fullerton']=new google.maps.LatLng(33.8703,-117.9244);
+		elexCityCenters['Garden Grove']=new google.maps.LatLng(33.7739,-117.9406);
+		elexCityCenters['Huntington Beach']=new google.maps.LatLng(33.6603,-117.9983);
+		elexCityCenters['Irvine']=new google.maps.LatLng(33.6694,-117.8222);
+		elexCityCenters['La Habra']=new google.maps.LatLng(33.9319,-117.9453);
+		elexCityCenters['La Palma']=new google.maps.LatLng(33.8494,-118.0439);
+		elexCityCenters['Ladera Ranch']=new google.maps.LatLng(33.5709,-117.6356);
+		elexCityCenters['Laguna Beach']=new google.maps.LatLng(33.5422,-117.7822);
+		elexCityCenters['Laguna Hills']=new google.maps.LatLng(33.5997,-117.6994);
+		elexCityCenters['Laguna Niguel']=new google.maps.LatLng(33.5319,-117.7025);
+		elexCityCenters['Laguna Woods']=new google.maps.LatLng(33.6092,-117.7328);
+		elexCityCenters['Lake Forest']=new google.maps.LatLng(33.6469,-117.6883);
+		elexCityCenters['Las Flores']=new google.maps.LatLng(33.5869,-117.6275);
+		elexCityCenters['Los Alamitos']=new google.maps.LatLng(33.8063,-118.0730);
+		elexCityCenters['Midway City']=new google.maps.LatLng(33.7447,-117.9883);
+		elexCityCenters['Mission Viejo']=new google.maps.LatLng(33.6000,-117.6711);
+		elexCityCenters['Newport Beach']=new google.maps.LatLng(33.6189,-117.9281);
+		elexCityCenters['North Tustin']=new google.maps.LatLng(33.7658,-117.7934);
+		elexCityCenters['Orange']=new google.maps.LatLng(33.7878,-117.8522);
+		elexCityCenters['Placentia']=new google.maps.LatLng(33.8722,-117.8694);
+		elexCityCenters['Rancho Santa Margarita']=new google.maps.LatLng(33.6414,-117.5944);
+		elexCityCenters['Rossmoor']=new google.maps.LatLng(33.7856,-118.0851);
+		elexCityCenters['San Clemente']=new google.maps.LatLng(33.4269,-117.6111);
+		elexCityCenters['San Juan Capistrano']=new google.maps.LatLng(33.5017,-117.6617);
+		elexCityCenters['Santa Ana']=new google.maps.LatLng(33.7456,-117.8669);
+		elexCityCenters['Seal Beach']=new google.maps.LatLng(33.7414,-118.1039);
+		elexCityCenters['Stanton']=new google.maps.LatLng(33.8025,-117.9922);
+		elexCityCenters['Sunset Beach']=new google.maps.LatLng(33.7164,-118.0681);
+		elexCityCenters['Tustin']=new google.maps.LatLng(33.7458,-117.8253);
+		elexCityCenters['Villa Park']=new google.maps.LatLng(33.8144,-117.8122);
+		elexCityCenters['Westminster']=new google.maps.LatLng(33.7592,-118.0058);
+		elexCityCenters['Yorba Linda']=new google.maps.LatLng(33.8886,-117.8122);
+		elexCityCenters['Unincorporated']=new google.maps.LatLng(33.6414, -117.5944);
+
+
+		function resetElexButtons(){
+			document.getElementById('contestbuttonpresident').style.backgroundColor="#bbb";
+			document.getElementById('contestbuttonpresident').style.borderWidth="1px";
+			document.getElementById('contestbuttonprop30').style.backgroundColor="#bbb";
+			document.getElementById('contestbuttonprop30').style.borderWidth="1px";
+			document.getElementById('contestbuttonprop34').style.backgroundColor="#bbb";
+			document.getElementById('contestbuttonprop34').style.borderWidth="1px";
+		}
+
+// This function will be familiar to advanced SQL users. It's a CASE IF function, and it calls a particular map; default is the presidential map.
+
+		function showElexContest(selectedContest){
+			elexCurrentContest = selectedContest;
+			document.getElementById('mapLegend').innerHTML=elexLegendText[selectedContest];
+			switch (selectedContest) {
+				case 'Prop30':
+					currentTable = '18pthJorq7ydVTW_5dLkClZUIKq0vnCMsBF25jrA';
+					document.getElementById('mapTitle').innerHTML = 'Proposition 30 (Taxes)';
+					contestButton=document.getElementById('contestbuttonprop30');
+					break;
+				case 'Prop34':
+					currentTable = '1ritrG74CrsYF_-Hca0BjIOWnoo1Kqq45XY84Edg';
+					document.getElementById('mapTitle').innerHTML = 'Proposition 34 (Death Penalty)';
+					contestButton=document.getElementById('contestbuttonprop34');
+					break;
+				default: // this should usually be a reoquest for the PRESIDENTIAL race
+					currentTable = '1KaTf7IVHQMU-0sFlocjqRLwDGfYKIGUyNAqHVg0';
+					document.getElementById('mapTitle').innerHTML = 'Presidential race';
+					contestButton=document.getElementById('contestbuttonpresident');
+					break;
+			}
+			resetElexButtons();
+			contestButton.style.backgroundColor="#eee";
+			contestButton.style.color="#333";
+			contestButton.style.borderWidth="2px";
+
+			elexResultsLayer.setMap(elexMap);
+			focusOnCity(elexCurrentCity);
+		}
+
+// This sets the initial center of the map near the center of Orange County.
+
+
+		function initializeElexMap() {
+		  elexMap = new google.maps.Map(document.getElementById('elexMapCanvas'), {
+			center: new google.maps.LatLng(33.72000, -117.82562255859375),
+			zoom: 11,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		  });
+
+		  elexResultsLayer = new google.maps.FusionTablesLayer({
+		  });
+
+		}
+
+// This re-centers the map when the user selects a city. A few lines down you'll see the variable "elexCityCenters," which we encountered 
+// in the long list of Orange County cities' latitudes and longitudes above.
+// Finally the map is instructed to keep the zoom at 11 if no city is selected or if the unincorporated area is selected.
+// If a particular city is selected, however, zoom to level 12.
+
+		function focusOnCity(selectedCity) {
+			elexCurrentCity=selectedCity;
+
+			// move to the center of the chosen city
+			elexMap.setOptions ({
+				center: elexCityCenters[selectedCity]
+			})
+
+			// if the chosen city is "select" ,then zoom out, recenter and select the whole layer
+			if (selectedCity==""){
+				elexMap.setOptions ({
+					zoom: 11,
+					center: new google.maps.LatLng(33.72000, -117.82562255859375)
+				})
+				elexResultsLayer.setOptions({
+					query: {
+						select: "'geometry'",
+						from: currentTable
+					}
+				});
+			} else {
+
+				// update the layer to only display the chosen cities
+				elexResultsLayer.setOptions({
+					query: {
+						select: "'Precinct'",
+						from: currentTable,
+						where: "'NAME10' = '" + selectedCity + "'"
+					}
+				});
+
+				// zoom out if unincorporated is chosen; zoom in for all other cities
+				if (selectedCity=="Unincorporated") {
+					elexMap.setOptions ({
+						zoom: 11,
+					})
+				} else {
+					elexMap.setOptions ({ zoom: 12, })
+				}
+
+			}
+
+		}
+
+		google.maps.event.addDomListener(window, 'load', function () { initializeElexMap(); showElexContest('President') } );
+	</script>
+	<TITLE>Live election results</TITLE>
+	<META NAME="GENERATOR" CONTENT="MAX's HTML Beauty++ 2004">
+</HEAD>
+
+<BODY>
+    <div id="elexMapInstructions">
+    	<strong>Choose a contest</strong> and click on a precinct for details. You also can choose a single city and search the precincts within that city.
+	</div>
+  	<div id="contestSelect">
+    	<div id="contestLinks">
+			<a href="javascript:void(0)" id="contestbuttonpresident" onClick="showElexContest('President');">President</a>
+			<a href="javascript:void(0)" id="contestbuttonprop30" onClick="showElexContest('Prop30');">Prop. 30 (Taxes)</a>
+			<a href="javascript:void(0)" id="contestbuttonprop34" onClick="showElexContest('Prop34');">Prop. 34 (Death Penalty)</a>
+			<select id="mapCitySelect" onchange="focusOnCity(this.value);">
+				<option value="">Pick a city</option>
+				<option value="Aliso Viejo">Aliso Viejo</option>
+				<option value="Anaheim">Anaheim</option>
+				<option value="Buena Park">Buena Park</option>
+				<option value="Brea">Brea</option>
+				<option value="Costa Mesa">Costa Mesa</option>
+				<option value="Coto de Caza">Coto de Caza</option>
+				<option value="Cypress">Cypress</option>
+				<option value="Dana Point">Dana Point</option>
+				<option value="Fountain Valley">Fountain Valley</option>
+				<option value="Fullerton">Fullerton</option>
+				<option value="Garden Grove">Garden Grove</option>
+				<option value="Huntington Beach">Huntington Beach</option>
+				<option value="Irvine">Irvine</option>
+				<option value="La Habra">La Habra</option>
+				<option value="La Palma">La Palma</option>
+				<option value="Ladera Ranch">Ladera Ranch</option>
+				<option value="Laguna Beach">Laguna Beach</option>
+				<option value="Laguna Hills">Laguna Hills</option>
+				<option value="Laguna Niguel">Laguna Niguel</option>
+				<option value="Laguna Woods">Laguna Woods</option>
+				<option value="Lake Forest">Lake Forest</option>
+				<option value="Las Flores">Las Flores</option>
+				<option value="Los Alamitos">Los Alamitos</option>
+				<option value="Midway City">Midway City</option>
+				<option value="Mission Viejo">Mission Viejo</option>
+				<option value="Newport Beach">Newport Beach</option>
+				<option value="North Tustin">North Tustin</option>
+				<option value="Orange">Orange</option>
+				<option value="Placentia">Placentia</option>
+				<option value="Rancho Santa Margarita">Rancho Santa Margarita</option>
+				<option value="Rossmoor">Rossmoor</option>
+				<option value="San Clemente">San Clemente</option>
+				<option value="San Juan Capistrano">San Juan Capistrano</option>
+				<option value="Santa Ana">Santa Ana</option>
+				<option value="Seal Beach">Seal Beach</option>
+				<option value="Stanton">Stanton</option>
+				<option value="Sunset Beach">Sunset Beach</option>
+				<option value="Tustin">Tustin</option>
+				<option value="Villa Park">Villa Park</option>
+				<option value="Westminster">Westminster</option>
+				<option value="Yorba Linda">Yorba Linda</option>
+				<option value="Unincorporated">Unincorporated</option>
+			</select>
+		</div>
+    </div>
+
+    <div id="mapDescription">
+		<div id="mapCredit">Analysis by Ronald Campbell / The Orange County Register<br> Source: Orange County Registrar of Voters</div>
+		<span id="mapTitle">Presidential race</span> <span id="contestStatus">(Status: really fake data)</span>
+    </div>
+    <div id="mapLegend"></div>
+    <div id="elexMapCanvas"></div>
+
+</BODY>
