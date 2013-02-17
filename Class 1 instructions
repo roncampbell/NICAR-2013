@@ -29,7 +29,7 @@ This last is the real killer, because in a lot of stories we have several datase
 
 But notice what we have gotten without writing a line of code ourselves: working HTML code containing a Google Fusion Table, along with code that lets a user choose a single city. Variations on this code would let a user choose a county, a ZIP code, a neighborhood or a street intersection.
 
-[See layer_test1.htm]
+[See layer_test.htm]
 
 Now we have to get more sophisticated. Some time before the election I had done a story on housing costs. Joe Yerardi at the San Antonio Express asked me for help finding equivalent data in Texas. In the spirit of NICAR, I provided it. When his story ran, I was blown away by the map, which let users easily switch between 1999 and 2010. I asked for the code. And in the spirit of NICAR, he provided it. 
 
