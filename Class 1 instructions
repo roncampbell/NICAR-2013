@@ -15,7 +15,7 @@ To get started, go to the Fusion Tables Layer Wizard. Spend a little time with t
 2. Share them with the public (a step that I always forget …).
 
 In Layer Wizard (http://fusion-tables-api-samples.googlecode.com/svn/trunk/FusionTablesLayerWizard/src/index.html)
-copy the Embed link, available from Tools | Publish. The Wizard builds HTML code for you that you can then copy and paste into your own HTML web editor. 
+copy the Embed link, available from Tools | Publish. The Wizard builds HTML code for you that you can then copy and paste into your HTML web editor. 
 
 We'll start with the nicar_ocprez map. Embed this map, then create a search feature to query. In Label field add “City” and in Column to query, add “NAME10”, then click “add search.”
 
