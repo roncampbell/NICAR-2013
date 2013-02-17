@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<!-- the style section creates styles for several variables -->
+<style>
+    .title {visibility:collapse;}
+    #map-canvas {width:900px; height:800px; }
+	label {font-family:arial;}
+	#contestSelect {width:895px; padding:5px 5px 5px 5px; background-color:#CCC; margin:10px 0px 0px 0px; height:25px; clear:both; margin-top:10px;}
+	#contestSelect a {color:#000000; text-decoration:none; font-family:arial;}
+	#contestSelect a:hover {color:#FF0000; font-weight:bold;}
+	#contestDisplay {font-weight:bold; font-size:16px; font-family:arial; float:left;}
+	#graphicHeader {font-weight:bold; font-size:24px; font-family:arial; margin-bottom:10px;}
+	#contestLinks {float:left;}
+	#countyLinks {float:right;}
+	#blurb {font-family:arial; width:895px; margin-bottom:10px; font-size:12px;}
+	#instructions{float:right;}
+	#mapCredit{width:895px; text-align:right; font-family:arial; padding-right:10px;font-size:12px;}
+  </style>
+  <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+  <script type="text/javascript">
+// now we import the presidential map and designates it as "layerl0" -- watch for this in a moment.  
+	var queryValue = '1KaTf7IVHQMU-0sFlocjqRLwDGfYKIGUyNAqHVg0';
+ 	var showContest = 'President';
+    var map;
+    var layerl0;
+
+// aueryChoice is a function that will let the user decide which election results to see	
+	function queryChoice(gDoc,displayContest){
+		queryValue = gDoc;
+		showContest = displayContest;
+		document.getElementById('contestDisplay').innerHTML = 'Contest: ' + displayContest;
+		initialize();
+	}
+
+// this function displays the map, chooses the map center, zoom level and default map --- layerl0, the presidential race.
+    function initialize() {
+      map = new google.maps.Map(document.getElementById('map-canvas'), {
+        center: new google.maps.LatLng(33.72000, -117.82562255859375),
+        zoom: 11,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+      layerl0 = new google.maps.FusionTablesLayer({
+        query: {
+          select: "'geometry'",
+          from: queryValue
+        },
+        map: map
+      });
+
+    }
+
+// This is a SQL query. It's based on an Arc GIS map that joined precincts with city names. NAME10 in the query is a field containing city names.
+// So the query means "Select precincts from query where precinct is in such-and-such a city."
+    function changeMapl0() {
+      var searchString = document.getElementById('search-string-l0').value.replace(/'/g, "\\'");
+      layerl0.setOptions({
+        query: {
+          select: "'Precinct'",
+          from: queryValue,
+          where: "'NAME10' = '" + searchString + "'"
+        }
+      });
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+  </script>
+<!-- Here are the hed and precede. The style is controlled by the <style> section above. -->
+
+  	<div id="graphicHeader">Live Orange County election results</div>
+    <div id="blurb">
+    	Orange County went to the polls Tuesday to choose a president, decide whether to raise taxes and abolish the death penalty. <br>
+		Also on the ballot: races for Congress, the state Legislature and dozens of local contests. Choose a contest and click on a precinct for details.<br>
+		You also can choose a single city and search the precincts within that city. <br>
+
+<!-- Here's the legend, with its pitiful red-blue shading. Totally inadequate for the nonpartisan propositions. -->
+
+    <div style="background-color:#dedede; padding:5px 0px 5px 5px; margin:5px 0px 10px 0px;"><span style="color:Blue; font-weight:bold;">Blue</span> = Strongly Democratic | <span style="color:aqua; font-weight:bold;">Light blue</span> = Leans Democratic | <span style="color:orange; font-weight:bold;">Orange</span> = Leans Republican | <span style="color:red; font-weight:bold;">Red</span> = Strongly Republican | <span style="color:gray; font-weight:bold;">Gray</span> = No votes</div>
+<div style="clear:both; margin:8px 0px 8px 0px">
+
+<!-- And now the contests, set off with <div> tags. -->
+
+	      	<div id="contestDisplay">Contest: President</div>
+		    
+        </div>
+    </div>
+  	<div id="contestSelect">
+    	<div id="contestLinks"><a href="javascript:void(0)" onClick="queryChoice('1KaTf7IVHQMU-0sFlocjqRLwDGfYKIGUyNAqHVg0','President');">President</a> | <a href="javascript:void(0)" onClick="queryChoice('18pthJorq7ydVTW_5dLkClZUIKq0vnCMsBF25jrA','Prop30');">Prop. 30 (Taxes) | <a href="javascript:void(0)" onClick="queryChoice('1ritrG74CrsYF_-Hca0BjIOWnoo1Kqq45XY84Edg','Prop34');">Prop. 34 (Death Penalty)</a></div>
+
+    </div>
+
+<!-- And finally the all-important (at least to me) byline. -->
+
+    <div id="mapCredit">Analysis by Ronald Campbell / The Orange County Register<br> Source: Orange County Registrar of Voters
+<TITLE>Live election results</TITLE>
+<META NAME="GENERATOR" CONTENT="MAX's HTML Beauty++ 2004">
+</HEAD>
+
+<BODY>
+    <div style="margin-top: 10px;">
+    <label>Pick a city</label>
+      <select id="search-string-l0" onchange="changeMapl0(this.value);">
+        <option value="">--Select--</option>
+        <option value="Aliso Viejo">Aliso Viejo</option>
+        <option value="Anaheim">Anaheim</option>
+        <option value="Buena Park">Buena Park</option>
+        <option value="Brea">Brea</option>
+        <option value="Costa Mesa">Costa Mesa</option>
+        <option value="Coto de Caza">Coto de Caza</option>
+        <option value="Cypress">Cypress</option>
+        <option value="Dana Point">Dana Point</option>
+        <option value="Fountain Valley">Fountain Valley</option>
+        <option value="Fullerton">Fullerton</option>
+        <option value="Garden Grove">Garden Grove</option>
+        <option value="Huntington Beach">Huntington Beach</option>
+        <option value="Irvine">Irvine</option>
+        <option value="La Habra">La Habra</option>
+        <option value="La Palma">La Palma</option>
+        <option value="Ladera Ranch">Ladera Ranch</option>
+        <option value="Laguna Beach">Laguna Beach</option>
+        <option value="Laguna Hills">Laguna Hills</option>
+        <option value="Laguna Niguel">Laguna Niguel</option>
+        <option value="Laguna Woods">Laguna Woods</option>
+        <option value="Lake Forest">Lake Forest</option>
+        <option value="Las Flores">Las Flores</option>
+        <option value="Los Alamitos">Los Alamitos</option>
+        <option value="Midway City">Midway City</option>
+        <option value="Mission Viejo">Mission Viejo</option>
+        <option value="Newport Beach">Newport Beach</option>
+        <option value="North Tustin">North Tustin</option>
+        <option value="Orange">Orange</option>
+        <option value="Placentia">Placentia</option>
+        <option value="Rancho Santa Margarita">Rancho Santa Margarita</option>
+        <option value="Rossmoor">Rossmoor</option>
+        <option value="San Clemente">San Clemente</option>
+        <option value="San Juan Capistrano">San Juan Capistrano</option>
+        <option value="Santa Ana">Santa Ana</option>
+        <option value="Seal Beach">Seal Beach</option>
+        <option value="Stanton">Stanton</option>
+        <option value="Sunset Beach">Sunset Beach</option>
+        <option value="Tustin">Tustin</option>
+        <option value="Villa Park">Villa Park</option>
+        <option value="Westminster">Westminster</option>
+        <option value="Yorba Linda">Yorba Linda</option>
+        <option value="Unincorporated">Unincorporated</option>
+
+      </select>
+    </div>
+    <div id="map-canvas"></div>
+
+</BODY>
