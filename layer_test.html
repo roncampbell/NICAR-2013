@@ -2,8 +2,9 @@
 <html>
   <head>
   <style>
-    #map-canvas { width:750px; height:600px; }
+    #map-canvas { width:800px; height:800px; }
   </style>
+<!-- The code above sets the map's size; the code below sets map center (lat, long) and pulls specific Fusion Table, using encryption key. -->
   <script type="text/javascript"
     src="http://maps.google.com/maps/api/js?sensor=false">
   </script>
@@ -13,23 +14,9 @@
     function initialize() {
       map = new google.maps.Map(document.getElementById('map-canvas'), {
         center: new google.maps.LatLng(33.62, -117.84),
-        zoom: 11
+        zoom: 11,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
       });
-      var style = [
-        {
-          featureType: 'all',
-          elementType: 'all',
-          stylers: [
-            { saturation: -1 }
-          ]
-        }
-      ];
-      var styledMapType = new google.maps.StyledMapType(style, {
-        map: map,
-        name: 'Styled Map'
-      });
-      map.mapTypes.set('map-style', styledMapType);
-      map.setMapTypeId('map-style');
       layerl0 = new google.maps.FusionTablesLayer({
         query: {
           select: "'col0>>1'",
@@ -40,13 +27,15 @@
         templateId: 1
       });
     }
+// The function below searches for precincts within a city ("NAME10") chosen by the user.
+
     function changeMapl0() {
       var searchString = document.getElementById('search-string-l0').value.replace(/'/g, "\\'");
       layerl0.setOptions({
         query: {
           select: "'col0>>1'",
           from: '17PtSUuKPncfjd3j36Vrh1e6NOZ4y3F2Ul0xTd0c',
-          where: "'GEOID10' = '" + searchString + "'"
+          where: "'NAME10' = '" + searchString + "'"
         }
       });
     }
@@ -55,12 +44,54 @@
   </head>
   <body>
     <div id="map-canvas"></div>
+<!-- Here is the list of cities from which the user can select. -->
     <div style="margin-top: 10px;">
-      <label></label>
+      <label>City</label>
       <select id="search-string-l0" onchange="changeMapl0(this.value);">
         <option value="">--Select--</option>
+        <option value="Unincorporated">Unincorporated</option>
+        <option value="Anaheim">Anaheim</option>
+        <option value="Huntington Beach">Huntington Beach</option>
+        <option value="Irvine">Irvine</option>
+        <option value="Garden Grove">Garden Grove</option>
+        <option value="Santa Ana">Santa Ana</option>
+        <option value="Orange">Orange</option>
+        <option value="Fullerton">Fullerton</option>
+        <option value="Newport Beach">Newport Beach</option>
+        <option value="Costa Mesa">Costa Mesa</option>
+        <option value="Mission Viejo">Mission Viejo</option>
+        <option value="Westminster">Westminster</option>
+        <option value="Buena Park">Buena Park</option>
+        <option value="Tustin">Tustin</option>
+        <option value="Lake Forest">Lake Forest</option>
+        <option value="Yorba Linda">Yorba Linda</option>
+        <option value="Laguna Niguel">Laguna Niguel</option>
+        <option value="Fountain Valley">Fountain Valley</option>
+        <option value="Brea">Brea</option>
+        <option value="Placentia">Placentia</option>
+        <option value="San Clemente">San Clemente</option>
+        <option value="Rancho Santa Margarita">Rancho Santa Margarita</option>
+        <option value="Cypress">Cypress</option>
+        <option value="North Tustin">North Tustin</option>
+        <option value="Dana Point">Dana Point</option>
+        <option value="La Habra">La Habra</option>
+        <option value="Seal Beach">Seal Beach</option>
+        <option value="Laguna Hills">Laguna Hills</option>
+        <option value="Aliso Viejo">Aliso Viejo</option>
+        <option value="Stanton">Stanton</option>
+        <option value="San Juan Capistrano">San Juan Capistrano</option>
+        <option value="Laguna Beach">Laguna Beach</option>
+        <option value="Laguna Woods">Laguna Woods</option>
+        <option value="Los Alamitos">Los Alamitos</option>
+        <option value="La Palma">La Palma</option>
+        <option value="Coto de Caza">Coto de Caza</option>
+        <option value="Villa Park">Villa Park</option>
+        <option value="Ladera Ranch">Ladera Ranch</option>
+        <option value="Midway City">Midway City</option>
+        <option value="Rossmoor">Rossmoor</option>
+        <option value="Las Flores">Las Flores</option>
+        <option value="Sunset Beach">Sunset Beach</option>
       </select>
     </div>
   </body>
-</html>
 </html>
