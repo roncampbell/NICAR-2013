@@ -1,0 +1,46 @@
+Class 1 instructions
+
+Go to: http://support.google.com/fusiontables/
+Click on Find public data in box at left
+On the next page, click on the hyperlink for Google Tables.
+On the next page, with All Tables highlighted, type nicar_ocprez in the search bar.
+Right-click on the link to display the table in a new tab; go back to the search page, type nicar_ocprop30 and right-click to display this table in another tab.
+
+We now have precinct-level results for the presidential race and for Proposition 30, an income and sales tax increase, for Orange County, Calif., for the November 2012 election. I produced this map in real time on Election Night using Fusion Tables. Click on the “Map of Geometry” on each Fusion Table to see what the maps looked like. If you click on an individual precinct you will get the results; you can zoom in or out. There is a problem that I did not recognize until about 11:30 on Election Night – far too late to solve – and I've left it here for you to see. Some precincts – parks, mainly – have no voters; and in Fusion Tables, areas with no value show up as bright red; this created an obvious problem for the Obama-Romney map, one that I didn't recognize until I saw blotches of red on the Proposition 30 map, where there should have been no red at all. 
+
+Now you have two problems: The first is to provide a legend, something to interpret the map. The second – and this is common with elections but also anytime we have a lot of information sharing a a similar geography – how do we combine two maps in one space?
+
+To get started, go to the Fusion Tables Layer Wizard. Spend a little time with the Wizard, and you'll learn some basics about HTML and PHP. This isn't Python, but it's close enough to give you an idea of how programming works. To use it you need to take a couple of simple steps:
+1. Prepare two or maps in Fusion Tables.
+2. Share them with the public (a step that I always forget …).
+
+In Layer Wizard (http://fusion-tables-api-samples.googlecode.com/svn/trunk/FusionTablesLayerWizard/src/index.html)
+copy the Embed link, available from Tools | Publish. The Wizard builds HTML code for you that you can then copy and paste into your own HTML web editor. 
+
+We'll start with the nicar_ocprez map. Embed this map, then create a search feature to query. In Label field add “City” and in Column to query, add “NAME10”, then click “add search.”
+
+
+
+I copy this to a text file, give it an .htm ending and save it. And we can easily open this in a browser. We can open the .htm file, change the size to 800 by 800 and re-center the map quickly (33.62, -117.84).
+
+And Google has created a working map that lets the user select a city – in this case one out of nearly 40 cities. But there are a few problems. First, there is no legend. Second, the map doesn't re-center; if you choose San Clemente, which is in the far south county and then choose Brea, which is in the far north, you probably won't see one of those cities. Third, you're only seeing one election, while we've got data for more.
+
+This last is the real killer, because in a lot of stories we have several datasets we're trying to squeeze into a single map.  
+
+But notice what we have gotten without writing a line of code ourselves: working HTML code containing a Google Fusion Table, along with code that lets a user choose a single city. Variations on this code would let a user choose a county, a ZIP code, a neighborhood or a street intersection.
+
+[See layer_test1.htm]
+
+Now we have to get more sophisticated. Some time before the election I had done a story on housing costs. Joe Yerardi at the San Antonio Express asked me for help finding equivalent data in Texas. In the spirit of NICAR, I provided it. When his story ran, I was blown away by the map, which let users easily switch between 1999 and 2010. I asked for the code. And in the spirit of NICAR, he provided it. 
+
+I built my map using code I copied shamelessly from the folks in San Antonio. Here's the first version [ElnTest1.htm]. Two obvious problems: The legend is based on the presidential race – and doesn't change when we switch to the propositions, which are nonpartisan. And the map does not re-center when I change cities.
+
+[See ElnTest1.htm]
+
+Let me walk you through the features of ElnTest1 and show you what it does.
+
+At this point I had exhausted my coding chops. So I turned to Kevin Sablan, a web genius at the Register. He made this map sing. He did so by adding two features:
+Separate legends for the presidential and proposition elections, each with its own shading. The proper index appeared in response to the contest the user chose.  
+Map re-centering. When the user chose a city, the map zoomed and re-centered on that city. My part in this was tedious but easy: I spent a half-hour in Google entering the following for every city and town in Orange County: city lat long (replacing city with the name and, if necessary state). Google responded with the latitude and west longitude; north latitudes are positive numbers and west longitudes are negative numbers. 
+
+[See ElnTest2.htm]
