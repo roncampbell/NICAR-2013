@@ -1,0 +1,91 @@
+Class 3 instructions
+
+In your web browser, open house.gov/representatives/  Click on the tab displaying representatives "By Last Name" (the second tab). This tab shows their state and district in one column. You should note a couple of things about this site: First, the URL remains unchanged, no matter which tab you click; second, the “By State and District” tab is the default and will display automatically if you refresh the site. When we examine the code closely, we'll see why.  
+
+Before scraping we want to see the underlying code. Every major browser offers a way to do this. 
+
+In Firefox, go to Tools | Web Developer | Page Source
+In Chrome, go to View | Developer | View Source
+In Internet Explorer, go to View | Source 
+
+We will be using a Python module called urllib2, which imports websites and is part of the standard Python installation, and an add-on called BeautifulSoup, available from http://www.crummy.com/software/BeautifulSoup/
+
+The first step is to import our tools, read the website into memory and then use a BeautifulSoup widget called “prettify” to examine the structure of the website. 
+
+To run the command, copy BeautifulDemo1.py from the Github site to your computer. Then on your command line enter:
+
+python beautifuldemo1.py
+
+The text of the site will display rapidly across your screen.
+
+This portion of the script creates a couple of variables worth mentioning:
+ -- url holds the location of the website.
+ -- soup holds the contents of the website after BeautifulSoup has read it.
+
+This website displays all the congress critters twice – once by state and once by last name. We want the second listing, since that listing includes the state and district number for each member. To get there we have to tell Python to look only at the part of the website containing the state and district numbers. 
+
+How do we get there? The vital clue is that the website defaults to “By State and District” – even if you click on “By Last Name” – the tab we want. If you hunt for the area where that default is set, you'll find it beginning around line 127 of the HTML code. “#byState” is set to “active” while “#byName” is set to “off”. These are within <div> tags. Search for “byName” and it shows up again around line 7,032. The exact term is: <div id=”byName”.
+
+Following this tag is the listing of members of the House with their states and district numbers – just what we want. We need a variable that will capture this part of the site, and only this part of the site.
+
+Copy BeautifulDemo2.py from the Github site to your computer. On your command line enter:
+
+python beautifuldemo2.py
+
+Look at the new code carefully:
+menu = soup.find_all(“div”, {“id”: “byName”})
+
+menu holds whatever soup grabbed from part of the website 
+find_all looks for every example of particular tags – the <div> tag, when followed by id:byName – and we already know where that occurs. 
+
+After several lines of header material, we get the members. It's not very pretty or useful. Each member is split over several lines, and we have HTML coding. But we have the stuff we want.
+
+The structure of the data is complicated. Let's outline it.
+
+<div>byName
+<table>Letter of the alphabet
+<row>Individual member of congress
+<column>Name
+<column>District
+…
+
+Got that? You have to grab separate tables for almost every letter of the alphabet (no Q's or X's or Z's) before you can find the rows containing individual congress critters. To do that, we'll use the find_all command again. We'll also refer to variables by aliases; this is useful because we can use them twice in the same commande.
+
+Copy BeautifulDemo3.py from the Github site to your computer. On your command line enter:
+
+python beautifuldemo3.py
+
+This takes the structure to its logical extreme: to the last row in the last letter – a congressman named Young. But the data is now all in a row, instead of stacked in lines. Believe it or not, we're very close.
+
+Next we need to extract each column from its HTML tag. We then need to re-assemble the columns, delimiting them with tabs. A delimiter is also known as a separator or “str” for short. You'll see that in a moment. 
+
+A couple of geeky notes: In Python and most programming languages, the first element in a series is denoted by a zero. So when you see col[1], that isn't the first column – it's the second. The first column is col[0]. To strip tags in BeautifulSoup we normally use the attribute .string – with a major exception. If we're dealing with a hyperlink, and we want the anchor associated with that hyperlink (in this case the name of the member of Congress), we use the attribute .a.string 
+
+Copy BeautifulDemo4.py from the Github site to your computer. On the command line enter:
+
+python beautifuldemo4.py
+
+You'll now see hundreds of rows of congress critters. Let's examine the new code:
+
+            try:
+                name = col[0].a.string
+                district = col[1].string
+                party = col[2].string
+                room = col[3].string
+                phone = col[4].string
+                str = "\t"
+                congo = (name, district, party, room, phone)
+                print str.join(congo)
+            except:
+                # print 'error: there wasn't text in all the columns presumably'
+                pass
+
+This assigns a variable to each column, extracts it from the HTML code, assigns a tab (“\t”) as the delimiter, assembles the columns into a new variable called congo and then prints congo in tab-delimited form. The “try … except” block is a way of checking to see if there are errors in the columns, such as blanks; if there were, the script would automatically “pass” those columns. 
+
+Finally, we add code creating a text file, congresscritters.txt, writing the data to that file and closing the file. 
+
+Copy BeautifulDemo5.py from the Github site to your computer. On the command line enter:
+
+python beautifuldemo5.py 
+
+You should find the file congresscritters.txt on your hard drive. Try opening it in Excel.
