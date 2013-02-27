@@ -1,0 +1,76 @@
+Python Programming for the Rest of Us
+
+Ronald Campbell
+The Orange County Register
+714/796-5030
+714/425-5169
+rcampbell@ocregister.com
+
+If you're like I was a while back, you think of programmers as high-tech wizards who whisper incantations to their laptops and are way, way smarter than the rest of us.
+
+This is only half-true. After months of study I can assure you that programmers absolutely, positively do not whisper incantations. They do, however, curse. Loudly and frequently.
+
+So why go to the trouble of learning programming, even at a basic level? Because you really don't want to hand-enter the results of each and every precinct on your Election Night map. Because you may only have a few hours between the time you get a boatload of data and your story deadline. Because you're tired of looking up the jail log every freaking morning and typing it into a spreadsheet. Because – and we promise not to tell your boss – you're lazy.
+
+You are reading the handout – maybe the only printed handout – for a three-part programming class at the NICAR 2013 conference. For more material, go to github.com/roncampbell/nicar-2013
+
+Let's start with a few principles that extend to all programming languages, not just Python.
+
+Grammar matters.
+
+If you take an online programming class – and there are several great online classes – you will read a warning that say something like this: “Type the scripts; do not cut and paste.” 
+
+They mean it. Resist the temptation to cut and paste what you see. Yes, you will make mistakes. That's the whole point. You'll learn to appreciate just how important every single- or double-quotation mark, every parentheses and every indentation is after you flub them. It took me hours to learn why one script I had copied wasn't running; turns out that a single line had three (3) sets of nesting parentheses, and I stupidly had opened three but closed only two. Copy editors would make great programmers.
+
+Words matter – except when they don't.
+
+Remember Strunk & White's famous “Rule 13”? The one that commanded, “Omit needless words”? In programming, a needless comma can be fatal. 
+
+But sometimes words don't matter at all. Every programming language has a procedure for commenting – for inserting words or lines or entire paragraphs that the computer will not read. So why insert a comment? Maybe as a reminder to yourself to clean up some workable but clunky code later. Or maybe to describe how each section of code fits together, so that another programmer will understand what you've done. 
+
+In Python, a comment begins with the hash mark (#), usually followed by a space. In PHP, it's //, and in HTML, it's <!-- ending with --> You will encounter all of these forms of commenting in this class. Every language also has methods of block-commenting, when several lines of comments appear together; we won't get into that.
+
+Programs = Swiss Army knives
+
+I'm a backpacker. I carry a Swiss Army knives with 10 or so attachments. Programming languages are like that knife: They come with attachments that can do all kinds of jobs. 
+
+In Python you can write a function to perform a specific job or assemble several functions into a module to do a more complex job. Or – bonus! – you can import one of the many modules that smart programmers have written for Python to do work like opening and parsing web pages, performing math, crunching regular expressions and baking pizzas. (I made up that last one – only SAS can do that.)
+
+Recycling pays
+
+Here is the great (or maybe not so great) intellectual leap I made as a novice programmer:  The code you write for one project can be recycled for another. The program that helped you survive one Election Night will, with some minor alterations, work just fine in two years when an entirely different set of politicos are on the ballot. A piece of the election code may do double-duty on a map of foreclosures. The lessons you learned from your first data dump will make your 10th go by in a fraction of the time. 
+
+Programming's like that. You may be lazy, but you aren't stupid.
+
+Write short, print often
+
+Every few lines, insert a print command to see if the program works. In Python this is really, really easy:
+
+print(xxxx)   	where the xxxx in parentheses is a variable name
+
+Resist the temptation to write several lines of code. You will mess up. By writing two or three lines and then printing, you can make sure that your code is working. The print command should produce exactly what you expected. If it doesn't, re-write the code until you get what you expected. Don't make the mistake of forging ahead, hoping that additional lines of code will fix whatever was wrong. This is like writing a really strong last paragraph, hoping it will make up for a lousy lede.
+
+
+Datatypes matter.
+
+In Python there are strings and there are numbers. (There are other datatypes, but let's stick with those two for the moment.) If you've spent any time at all dealing with a SQL database, you know how important datatypes are to a database. Well, database managers aren't half as finicky as programming languages. A programming language can find dozens of ways to ruin your day if you don't pay attention to the datatype in a particular field and the rules associated with it. You have been warned.
+
+The command line matters.
+
+Three decades ago, the geniuses at Xerox PARC invented the graphical user interface. Apple quickly adopted the GUI, and Microsoft soon followed. Today the vast majority of computer users have no clue what a C: or $ or >> means. They have become addicted to the GUI. 
+
+If you are going to program, you must break your GUI addiction. You must become comfortable with the command line. You must learn how, using the keyboard alone, to copy and delete files and move among directories. These are basic, entry-level programming skills. In Windows use Powershell, available beginning with Windows 7. In Mac use Terminal. If you have a Linux box, you probably already know where to find the Shell or Terminal.
+
+Yes, we know it's frustrating. Yes, we know it's obscure. It's merely essential.
+  
+
+Further Reading
+
+Zed A. Shaw has a fine set of online classes, all variations on “Learn xxx the Hard Way” (learncodethehardway.org). I can personally vouch for his Python and Command Line (CLI Crash Course) classes. The HTML versions are free. He charges $29 for a combo PDF and video of the Python book. He also offers classes in Ruby, Regex (regular expressions), C and SQL.
+
+The documentation for BeautifulSoup is a miniature course in Python programming.  http://www.crummy.com/software/BeautifulSoup/bs4/doc/#
+
+BeautifulSoup is one of many ways to scrape a website. For a systematic approach, read Scraping for Journalists by Paul Bradshaw, an ebook available at https://leanpub.com/scrapingforjournalists for $12.99.
+
+The Bastards Book of Ruby by NICAR mainstay Dan Nguyen is, yes, about different programming language. But it's also a basic approach to programming. http://ruby.bastardsbook.com/
+
